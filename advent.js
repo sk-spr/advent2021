@@ -1,4 +1,5 @@
 const variables = require("./variables.js")
+const {factorial} = require("mathjs")
 //day 1 part 1
 //find the number of instances of f(x+1) > f(x)
 function depthchange(depths){
@@ -222,37 +223,59 @@ function lanternfish(fish, n){
             }
         }
         f = next
-        console.log(f.length)
     }
     return f.length
 }
 function lanternfish_approx(initial, days){
     return 0
 }
+//day 7
+//part 1
+//calculate horizontal position with least fuel needed to align all crab submarines
+function crab_subs(crabs, tri){
+    let max = 0
+    for(let i = 0; i < crabs.length; i++) if(crabs[i]>max) max = crabs[i]
+    let positions = []
+    for(let i = 0; i <= max; i++){
+        let fueltotal = 0
+        for(let c = 0; c < crabs.length; c++)
+            fueltotal += (tri) ? triangular(Math.abs(crabs[c] - i)) : Math.abs(crabs[c] - i)
+        positions.push(fueltotal)
+    }
+    return positions.slice().sort((a,b) => (a-b))[0]
+}
+//compute the nth triangular number
+function triangular(n){
+    return (n*(n+1))/2
+}
 // run tests
 //day 1
 console.log("tests:")
 console.log("day 1")
-console.log(depthchange(variables.inputs1))
+//console.log(depthchange(variables.inputs1))
 console.log("day 1 part 2")
-console.log(rolling_depthchange(variables.inputs1))
+//console.log(rolling_depthchange(variables.inputs1))
 console.log("day 2")
-console.log(final_steering(variables.inputs2))
+//console.log(final_steering(variables.inputs2))
 console.log("day 2 part 2")
-console.log(aim_steering(variables.inputs2))
+//console.log(aim_steering(variables.inputs2))
 console.log("day 3")
-console.log(diag_01(variables.inputs3))
+//console.log(diag_01(variables.inputs3))
 console.log("day 3 part 2")
-console.log(life_support(variables.inputs3))
+//console.log(life_support(variables.inputs3))
 console.log("day 4")
-console.log(bingo(variables.inputs4_nums, variables.inputs4_boards, (a,b) => a-b))
+//console.log(bingo(variables.inputs4_nums, variables.inputs4_boards, (a,b) => a-b))
 console.log("day 4 part 2")
-console.log(bingo(variables.inputs4_nums, variables.inputs4_boards, (a,b) => b-a))
+//console.log(bingo(variables.inputs4_nums, variables.inputs4_boards, (a,b) => b-a))
 console.log("day 5")
-console.log(vent_crossings(variables.inputs5, true))
+//console.log(vent_crossings(variables.inputs5, true))
 console.log("day 5 part 2")
-console.log(vent_crossings(variables.inputs5, false))
+//console.log(vent_crossings(variables.inputs5, false))
 console.log("day 6")
-console.log(lanternfish(variables.inputs6, 80))
+//console.log(lanternfish(variables.inputs6, 80))
 console.log("day 6 part 2")
-console.log(lanternfish_approx(variables.inputs6, 256))
+//console.log(lanternfish_approx(variables.inputs6, 256))
+console.log("day 7")
+console.log(crab_subs(variables.inputs7, false))
+console.log("day 7 part 2")
+console.log(crab_subs(variables.inputs7, true))
