@@ -207,6 +207,28 @@ function vent_crossings(vectors, onlyhorver){
 function squaredist(x1, y1, x2, y2){
     return (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)
 }
+//day 6
+//part 1
+//given a list of lanternfish timers, simulate the number of lanternfish after n days
+function lanternfish(fish, n){
+    let f = fish
+    for(let day = 0; day < n; day++){
+        let next = f
+        for(let i = 0; i < f.length; i++){
+            f[i]--
+            if(f[i] < 0){
+                next.push(9)
+                next[i] = 6
+            }
+        }
+        f = next
+        console.log(f.length)
+    }
+    return f.length
+}
+function lanternfish_approx(initial, days){
+    return 0
+}
 // run tests
 //day 1
 console.log("tests:")
@@ -231,4 +253,6 @@ console.log(vent_crossings(variables.inputs5, true))
 console.log("day 5 part 2")
 console.log(vent_crossings(variables.inputs5, false))
 console.log("day 6")
-console.log("placeholder")
+console.log(lanternfish(variables.inputs6, 80))
+console.log("day 6 part 2")
+console.log(lanternfish_approx(variables.inputs6, 256))
