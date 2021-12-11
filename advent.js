@@ -248,6 +248,87 @@ function crab_subs(crabs, tri){
 function triangular(n){
     return (n*(n+1))/2
 }
+//day 9
+//part 1
+//find the local low points of the playfield
+function low_points(field){
+    let field_dest = []
+    for(let i = 0; i < field.length; i++){
+        field_dest.push([])
+        for(let j = 0; j < field[0].length; j++){
+            field_dest[i].push(parseInt(field[i].substring(j,j+1)))
+        }
+    }
+    let minima = []
+    for(let y = 0; y < field_dest.length; y++){
+        for(let x = 0; x < field_dest[0].length; x++){
+            let left = (x>0) ? field_dest[y][x-1] : 10
+            let right = (x<field_dest[0].length-1) ? field_dest[y][x+1] : 10
+            let up = (y>0) ? field_dest[y-1][x] : 10
+            let down = (y<field_dest.length - 1) ? field_dest[y+1][x] : 10
+            if(field_dest[y][x] < up && field_dest[y][x] < down && field_dest[y][x] < left && field_dest[y][x] < right) minima.push(field_dest[y][x])
+        }
+    }
+    let score = 0
+    minima.forEach(min => score += min + 1)
+    return score
+}
+//day 10
+//part 1
+let closers = {"(":")","<":">","[":"]","{":"}"}
+let openers = {")":"(",">":"<","]":"[","}":"{"}
+
+//find the first bracket match error per line, score them according to the task
+function bracket_error_single(string){
+    let score = 0
+    let open_stack = []
+    for(let c = 0; c < string.length; c++){
+        let current = string.substring(c, c+1)
+        if(current == "(" || current == "<"|| current == "[" | current == "{"){
+            open_stack.push(current)
+        } else if(current == ")" || current == ">"|| current == "]" | current == "}"){
+            if(open_stack[open_stack.length - 1] == openers[current])
+                open_stack.pop()
+            else{
+                if(current == ")") score += 3
+                if(current == "]") score += 57
+                if(current == "}") score += 1197
+                if(current == ">") score += 25137
+                return [score, open_stack]
+            }
+        }
+    }
+    return [score, open_stack]
+}
+
+function bracket_errors(strings){
+    let score = 0
+    let completescores = []
+    for(let i = 0; i < strings.length; i++){
+        let s = bracket_error_single(strings[i])
+        if(s[0] > 0) score += s[0]
+        else {
+            completescores.push([])
+            let stack = s[1]
+            while(stack.length > 0){
+                completescores[completescores.length -1] *= 5
+                if(stack[stack.length - 1] == "(") completescores[completescores.length - 1]++
+                if(stack[stack.length - 1] == "[") completescores[completescores.length - 1] += 2
+                if(stack[stack.length - 1] == "{") completescores[completescores.length - 1] += 3
+                if(stack[stack.length - 1] == "<") completescores[completescores.length - 1] += 4
+                stack.pop()
+            }
+        
+        }
+    }
+
+    completescores.sort((a,b)=> a-b)
+    let completescore = completescores[completescores.length / 2 - 0.5]
+    return [score, completescore]
+}
+
+function bracket_error(strings){return bracket_errors(strings)[0]}
+function bracket_complete(strings){return bracket_errors(strings)[1]}
 // run tests
 //day 1
 console.log("tests:")
@@ -279,3 +360,9 @@ console.log("day 7")
 console.log(crab_subs(variables.inputs7, false))
 console.log("day 7 part 2")
 console.log(crab_subs(variables.inputs7, true))
+console.log("day 9")
+console.log(low_points(variables.inputs9))
+console.log("day 10")
+console.log(bracket_error(variables.inputs10))
+console.log("day 10 part 2")
+console.log(bracket_complete(variables.inputs10))
